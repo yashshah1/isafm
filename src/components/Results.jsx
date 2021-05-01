@@ -62,7 +62,8 @@ const Results = ({ district, age }) => {
           style={{ flexDirection: "column", alignItems: "center" }}
         >
           <h1 align="center">
-            There are {capacity} slots in the next 7 days!{" "}
+            There {capacity === 1 ? "is" : "are"} {capacity}{" "}
+            {capacity === 1 ? "slot" : "slots"} in the next 7 days!{" "}
             {capacity === 0 ? "😔" : "🚀"}
           </h1>
           <span style={{ userSelect: "none" }}>
