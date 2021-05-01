@@ -1,20 +1,20 @@
 {
   "files": {
     "main.css": "/isafm/static/css/main.50f09958.chunk.css",
-    "main.js": "/isafm/static/js/main.7e5944a9.chunk.js",
-    "main.js.map": "/isafm/static/js/main.7e5944a9.chunk.js.map",
+    "main.js": "/isafm/static/js/main.f1674abb.chunk.js",
+    "main.js.map": "/isafm/static/js/main.f1674abb.chunk.js.map",
     "runtime-main.js": "/isafm/static/js/runtime-main.c520eaae.js",
     "runtime-main.js.map": "/isafm/static/js/runtime-main.c520eaae.js.map",
-    "static/js/2.a7ad303b.chunk.js": "/isafm/static/js/2.a7ad303b.chunk.js",
-    "static/js/2.a7ad303b.chunk.js.map": "/isafm/static/js/2.a7ad303b.chunk.js.map",
+    "static/js/2.efb84f0b.chunk.js": "/isafm/static/js/2.efb84f0b.chunk.js",
+    "static/js/2.efb84f0b.chunk.js.map": "/isafm/static/js/2.efb84f0b.chunk.js.map",
     "index.html": "/isafm/index.html",
     "static/css/main.50f09958.chunk.css.map": "/isafm/static/css/main.50f09958.chunk.css.map",
-    "static/js/2.a7ad303b.chunk.js.LICENSE.txt": "/isafm/static/js/2.a7ad303b.chunk.js.LICENSE.txt"
+    "static/js/2.efb84f0b.chunk.js.LICENSE.txt": "/isafm/static/js/2.efb84f0b.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.c520eaae.js",
-    "static/js/2.a7ad303b.chunk.js",
+    "static/js/2.efb84f0b.chunk.js",
     "static/css/main.50f09958.chunk.css",
-    "static/js/main.7e5944a9.chunk.js"
+    "static/js/main.f1674abb.chunk.js"
   ]
 }
