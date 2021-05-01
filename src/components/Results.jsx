@@ -44,7 +44,7 @@ const Results = ({ district, age }) => {
         )
         .then((sessions) => sessions.reduce((ac, v) => ac + v.capacity, 0))
         .then((capacity) => {
-          setCapacity(capacity);
+          setCapacity(Math.floor(capacity));
           setIsloading(false);
         });
     };
