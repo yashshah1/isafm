@@ -6,7 +6,9 @@ export const generateQueryString = (data) => {
 
 export const parseQueryString = (s) => {
   const obj = {};
-  if (s.length <= 1) return { state: 21, district: 363, age: 21 };
+  if (s.length <= 1) {
+    return { state: "21", district: "363", age: "21" };
+  }
 
   const queryStringParams = s.slice(1).split("&");
   queryStringParams.forEach((s) => {
