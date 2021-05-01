@@ -1,19 +1,24 @@
 import { useEffect, useState } from "react";
+import Snackbar from "@material-ui/core/Snackbar";
+import IconButton from "@material-ui/core/IconButton";
+import CloseIcon from "@material-ui/icons/Close";
 import dayjs from "dayjs";
 import flattenDeep from "lodash.flattendeep";
 import { URLForSlots } from "../constants";
-const now = dayjs();
 
-const copyURL = () => {
-  navigator.clipboard.writeText(window.location.href).then(
-    () => {},
-    () => alert("error copying")
-  );
-};
+const now = dayjs();
 
 const Results = ({ district, age }) => {
   const [isLoading, setIsloading] = useState(false);
   const [capacity, setCapacity] = useState(0);
+  const [isOpen, setIsOpen] = useState(false);
+
+  const copyURL = () => {
+    navigator.clipboard.writeText(window.location.href).then(
+      () => setIsOpen(true),
+      () => alert("error copying")
+    );
+  };
 
   useEffect(() => {
     const fetchResults = async () => {
@@ -62,10 +67,32 @@ const Results = ({ district, age }) => {
           </h1>
           <span>
             Want to check back again later?{" "}
-            <u onClick={copyURL}>Copy the URL!</u>
+            <u onClick={copyURL} style={{ cursor: "pointer" }}>
+              Copy the URL!
+            </u>
           </span>
         </div>
       )}
+      <Snackbar
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "left",
+        }}
+        open={isOpen}
+        autoHideDuration={2000}
+        onClose={() => setIsOpen(false)}
+        message="Copied to clipboard"
+        action={
+          <IconButton
+            size="small"
+            aria-label="close"
+            color="inherit"
+            onClick={() => setIsOpen(false)}
+          >
+            <CloseIcon fontSize="small" />
+          </IconButton>
+        }
+      />
     </>
   );
 };
