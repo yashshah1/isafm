@@ -65,7 +65,7 @@ const Results = ({ district, age }) => {
             There are {capacity} slots in the next 7 days!{" "}
             {capacity === 0 ? "😔" : "🚀"}
           </h1>
-          <span>
+          <span style={{ userSelect: "none" }}>
             Want to check back again later?{" "}
             <u onClick={copyURL} style={{ cursor: "pointer" }}>
               Copy the URL!
