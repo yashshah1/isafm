@@ -2,13 +2,11 @@ const Footer = () => {
   return (
     <footer
       style={{
-        position: "fixed",
-        left: "0px",
         bottom: "25px",
-        width: "100%",
         fontSize: "1.2em",
         color: "grey",
         textAlign: "center",
+        marginTop: "1.5rem",
       }}
     >
       <div className="container">
