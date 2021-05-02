@@ -1,13 +1,8 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Snackbar from "@material-ui/core/Snackbar";
 import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
-import CircularProgress from "@material-ui/core/CircularProgress";
-import dayjs from "dayjs";
-import flattenDeep from "lodash.flattendeep";
-import { URLForSlots } from "../constants";
-
-const now = dayjs();
+import Spinner from "./Spinner";
 
 const Results = ({ capacity, isLoading }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -22,13 +17,11 @@ const Results = ({ capacity, isLoading }) => {
   return (
     <>
       {isLoading ? (
-        <div className="flex justify-center">
-          <CircularProgress />
-        </div>
+        <Spinner />
       ) : (
         <div
-          className="flex"
-          style={{ flexDirection: "column", alignItems: "center" }}
+          className="flex flex-column align-center"
+          style={{ marginBottom: "1rem", textAlign: "center" }}
         >
           <h1 align="center">
             There {capacity === 1 ? "is" : "are"} {capacity}{" "}
