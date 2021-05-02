@@ -9,9 +9,7 @@ import { URLForSlots } from "../constants";
 
 const now = dayjs();
 
-const Results = ({ district, age }) => {
-  const [isLoading, setIsloading] = useState(false);
-  const [capacity, setCapacity] = useState(0);
+const Results = ({ capacity, isLoading }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const copyURL = () => {
@@ -20,38 +18,6 @@ const Results = ({ district, age }) => {
       () => alert("error copying")
     );
   };
-
-  useEffect(() => {
-    const fetchResults = async () => {
-      if (+age < 18) {
-        setCapacity(0);
-        return;
-      }
-      setIsloading(true);
-      const date = now.format("DD-MM-YYYY");
-      const URL = `${URLForSlots}district_id=${district}&date=${date}`;
-      fetch(URL)
-        .then((res) => res.json())
-        .then((res) => res.centers.map((center) => center.sessions))
-        .then((sessions) => flattenDeep(sessions))
-        .then((sessions) =>
-          sessions.map((s) => ({
-            capacity: s.available_capacity,
-            min_age: s.min_age_limit,
-          }))
-        )
-        .then((sessions) =>
-          sessions.filter((s) => s.capacity > 0 && s.min_age <= +age)
-        )
-        .then((sessions) => sessions.reduce((ac, v) => ac + v.capacity, 0))
-        .then((capacity) => {
-          setCapacity(Math.floor(capacity));
-          setIsloading(false);
-        });
-    };
-
-    fetchResults();
-  }, [district, age]);
 
   return (
     <>
