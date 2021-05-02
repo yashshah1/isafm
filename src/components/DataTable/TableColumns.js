@@ -45,6 +45,7 @@ const columns = [
   },
   {
     name: "block",
+    label: "Block",
     options: {
       display: false,
       filter: true,
