@@ -4,8 +4,8 @@ import { URLForSlots } from "../constants";
 
 const now = dayjs();
 
-export const fetchSlots = (district, age) => {
-  if (+age < 18) return Promise.resolve([]);
+export const fetchSlots = async (district, age) => {
+  if (+age < 18) return [];
   const date = now.format("DD-MM-YYYY");
   const URL = `${URLForSlots}district_id=${district}&date=${date}`;
   return fetch(URL)
@@ -27,8 +27,14 @@ export const fetchSlots = (district, age) => {
     })
     .then((sessions) => flattenDeep(sessions))
     .then((sessions) =>
-      sessions.filter((s) => s.capacity > 0 && s.min_age <= +age)
-    );
+      sessions
+        .filter((s) => s.capacity > 0 && s.min_age <= +age)
+        .map((s) => ({
+          ...s,
+          vaccine: s.vaccine || "N/A",
+        }))
+    )
+    .then((sessions) => sessions.sort((a, b) => b.capacity - a.capacity));
 };
 
 export const getCountOfSlots = (slots) => {
