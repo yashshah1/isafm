@@ -22,6 +22,19 @@ const useStyles = makeStyles((theme) => ({
   selectEmpty: {
     marginTop: theme.spacing(2),
   },
+  footer : {
+    ['@media (min-width:326px)']: {
+      position: "fixed",
+    },
+    ['@media (min-height:580px)']: {
+      bottom: "25px",
+    },
+    left: "0px",
+    width: "100%",
+    fontSize: "1.2em",
+    color: "grey",
+    textAlign: "center",
+  }
 }));
 
 function App() {
@@ -132,7 +145,7 @@ function App() {
           <Results district={selectedDistrict} age={age} />
         )}
       </Container>
-      <Footer />
+      <Footer classes={classes} />
     </>
   );
 }
