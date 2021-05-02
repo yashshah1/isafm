@@ -15,10 +15,26 @@
   display: flex;
 }
 
+.flex-column {
+  flex-direction: column;
+}
+
+.flex-wrap {
+  flex-wrap: wrap;
+}
+
 .justify-center {
   justify-content: center;
 }
 
+.align-center {
+  align-items: center;
+}
+
 .input-label {
   text-transform: capitalize;
+}
+
+.gap-1 {
+  gap: "0.5rem";
 }

@@ -3,15 +3,18 @@ import { withRouter, useLocation, useHistory } from "react-router-dom";
 
 import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
-import Container from "@material-ui/core/Container";
-import CircularProgress from "@material-ui/core/CircularProgress";
+import Grid from "@material-ui/core/Grid";
 
 import Selector from "./components/Selector";
 import Results from "./components/Results";
+import Header from "./components/Header";
 import Footer from "./components/Footer";
+import Spinner from "./components/Spinner";
+import DataTable from "./components/DataTable";
 
 import fetchStates from "./utils/fetchStates";
 import fetchDistricts from "./utils/fetchDistricts";
+import { fetchSlots, getCountOfSlots } from "./utils/fetchSlots";
 import * as URLUtils from "./utils/url";
 
 const useStyles = makeStyles((theme) => ({
@@ -23,11 +26,11 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(2),
   },
   footer: {
-    "@media (min-width:326px)": {
+    "@media (min-width:962px)": {
       position: "fixed",
     },
-    "@media (min-height:580px)": {
-      bottom: "25px",
+    "@media (min-height:780px)": {
+      bottom: "15px",
     },
     left: "0px",
     width: "100%",
@@ -35,10 +38,18 @@ const useStyles = makeStyles((theme) => ({
     color: "grey",
     textAlign: "center",
   },
+  root: {
+    flexGrow: 1,
+    marginLeft: "1rem",
+    marginRight: "1rem",
+  },
 }));
 
 function App() {
-  const [isLoading, setIsLoading] = useState(true);
+  const [isInitiallyLoading, setIsInitiallyLoading] = useState(true);
+  const [isDataLoading, setIsDataLoading] = useState(true);
+  const [capacity, setCapacity] = useState(0);
+  const [tableData, setTableData] = useState([]);
   const [states, setStates] = useState([]);
   const [selectedState, setSelectedState] = useState("");
   const [districts, setDistricts] = useState([]);
@@ -58,7 +69,7 @@ function App() {
           name: state_name,
         }))
       );
-      setIsLoading(false);
+      setIsInitiallyLoading(false);
     };
     getStates();
   }, []);
@@ -71,7 +82,7 @@ function App() {
   }, [search]);
 
   useEffect(() => {
-    setIsLoading(true);
+    setIsInitiallyLoading(true);
     const getDistricts = async () => {
       const districts = await fetchDistricts(selectedState);
       setDistricts(
@@ -80,10 +91,21 @@ function App() {
           name: district_name,
         }))
       );
-      setIsLoading(false);
+      setIsInitiallyLoading(false);
     };
     getDistricts();
   }, [selectedState]);
+
+  useEffect(() => {
+    if (!(selectedDistrict && age)) return;
+
+    setIsDataLoading(true);
+    fetchSlots(selectedDistrict, age).then((slots) => {
+      setTableData(slots);
+      setCapacity(getCountOfSlots(slots));
+      setIsDataLoading(false);
+    });
+  }, [selectedDistrict, age]);
 
   const getChangeHandler = (key) => (e) => {
     const obj = URLUtils.parseQueryString(search);
@@ -96,55 +118,50 @@ function App() {
 
   return (
     <>
-      <Container maxWidth="sm">
-        <h1 align="center">Is a (vaccination) slot available for me?</h1>
-        <h3 align="center">For people who are too lazy to login</h3>
-        <br />
-        {isLoading ? (
-          <div className="flex justify-center">
-            <CircularProgress />
-          </div>
-        ) : (
-          <>
-            <div className="flex justify-center">
-              <Selector
-                values={states}
-                selectedValue={selectedState}
-                classes={classes}
-                onSelect={getChangeHandler("state")}
-                prefix="state"
-              />
-
-              <Selector
-                values={districts}
-                selectedValue={selectedDistrict}
-                classes={classes}
-                onSelect={getChangeHandler("district")}
-                prefix="district"
-              />
+      <div className={classes.root}>
+        <Header />
+        <Grid container spacing={2}>
+          <Grid item xs={12} md={6}>
+            <div className="flex flex-column">
+              <br />
+              {isInitiallyLoading ? (
+                <Spinner />
+              ) : (
+                <div className="flex justify-center align-center flex-wrap gap-1">
+                  <Selector
+                    values={states}
+                    selectedValue={selectedState}
+                    classes={classes}
+                    onSelect={getChangeHandler("state")}
+                    prefix="state"
+                  />
+                  <Selector
+                    values={districts}
+                    selectedValue={selectedDistrict}
+                    classes={classes}
+                    onSelect={getChangeHandler("district")}
+                    prefix="district"
+                  />
+                  <TextField
+                    id="outlined-basic"
+                    label="Age"
+                    variant="outlined"
+                    width="md"
+                    value={age}
+                    onChange={getChangeHandler("age")}
+                  />
+                </div>
+              )}
+              {selectedDistrict !== "" && age !== "" && (
+                <Results capacity={capacity} isLoading={isDataLoading} />
+              )}
             </div>
-            <br />
-            {selectedDistrict !== "" && (
-              <div className="flex" style={{ flexDirection: "column" }}>
-                <TextField
-                  id="outlined-basic"
-                  label="Age"
-                  variant="outlined"
-                  width="sm"
-                  value={age}
-                  onChange={getChangeHandler("age")}
-                />
-              </div>
-            )}
-          </>
-        )}
-
-        <br />
-        <br />
-        {selectedDistrict !== "" && age !== "" && (
-          <Results district={selectedDistrict} age={age} />
-        )}
-      </Container>
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <DataTable slots={tableData} isLoading={isDataLoading} />
+          </Grid>
+        </Grid>
+      </div>
       <Footer classes={classes.footer} />
     </>
   );

@@ -1,17 +1,10 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Snackbar from "@material-ui/core/Snackbar";
 import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
-import CircularProgress from "@material-ui/core/CircularProgress";
-import dayjs from "dayjs";
-import flattenDeep from "lodash.flattendeep";
-import { URLForSlots } from "../constants";
+import Spinner from "./Spinner";
 
-const now = dayjs();
-
-const Results = ({ district, age }) => {
-  const [isLoading, setIsloading] = useState(false);
-  const [capacity, setCapacity] = useState(0);
+const Results = ({ capacity, isLoading }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const copyURL = () => {
@@ -21,48 +14,14 @@ const Results = ({ district, age }) => {
     );
   };
 
-  useEffect(() => {
-    const fetchResults = async () => {
-      if (+age < 18) {
-        setCapacity(0);
-        return;
-      }
-      setIsloading(true);
-      const date = now.format("DD-MM-YYYY");
-      const URL = `${URLForSlots}district_id=${district}&date=${date}`;
-      fetch(URL)
-        .then((res) => res.json())
-        .then((res) => res.centers.map((center) => center.sessions))
-        .then((sessions) => flattenDeep(sessions))
-        .then((sessions) =>
-          sessions.map((s) => ({
-            capacity: s.available_capacity,
-            min_age: s.min_age_limit,
-          }))
-        )
-        .then((sessions) =>
-          sessions.filter((s) => s.capacity > 0 && s.min_age <= +age)
-        )
-        .then((sessions) => sessions.reduce((ac, v) => ac + v.capacity, 0))
-        .then((capacity) => {
-          setCapacity(Math.floor(capacity));
-          setIsloading(false);
-        });
-    };
-
-    fetchResults();
-  }, [district, age]);
-
   return (
     <>
       {isLoading ? (
-        <div className="flex justify-center">
-          <CircularProgress />
-        </div>
+        <Spinner />
       ) : (
         <div
-          className="flex"
-          style={{ flexDirection: "column", alignItems: "center" }}
+          className="flex flex-column align-center"
+          style={{ marginBottom: "1rem", textAlign: "center" }}
         >
           <h1 align="center">
             There {capacity === 1 ? "is" : "are"} {capacity}{" "}
