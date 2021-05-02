@@ -3,13 +3,14 @@ import { withRouter, useLocation, useHistory } from "react-router-dom";
 
 import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
-import CircularProgress from "@material-ui/core/CircularProgress";
 import Grid from "@material-ui/core/Grid";
 
 import Selector from "./components/Selector";
 import Results from "./components/Results";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
+import Spinner from "./components/Spinner";
+import DataTable from "./components/DataTable";
 
 import fetchStates from "./utils/fetchStates";
 import fetchDistricts from "./utils/fetchDistricts";
@@ -108,14 +109,12 @@ function App() {
         <Header />
         <Grid container spacing={2}>
           <Grid item xs={12} md={6}>
-            <br />
-            {isInitiallyLoading ? (
-              <div className="flex justify-center">
-                <CircularProgress />
-              </div>
-            ) : (
-              <>
-                <div className="flex justify-center align-center">
+            <div className="flex flex-column">
+              <br />
+              {isInitiallyLoading ? (
+                <Spinner />
+              ) : (
+                <div className="flex justify-center align-center flex-wrap gap-1">
                   <Selector
                     values={states}
                     selectedValue={selectedState}
@@ -136,21 +135,17 @@ function App() {
                     variant="outlined"
                     width="md"
                     value={age}
-                    style={{ marginLeft: "0.5rem" }}
                     onChange={getChangeHandler("age")}
                   />
                 </div>
-                <br />
-              </>
-            )}
-
-            <br />
-            {selectedDistrict !== "" && age !== "" && (
-              <Results capacity={capacity} isLoading={isDataLoading} />
-            )}
+              )}
+              {selectedDistrict !== "" && age !== "" && (
+                <Results capacity={capacity} isLoading={isDataLoading} />
+              )}
+            </div>
           </Grid>
           <Grid item xs={12} md={6}>
-            <h1>Hello World</h1>
+            <DataTable slots={tableData} isLoading={isDataLoading} />
           </Grid>
         </Grid>
       </div>
