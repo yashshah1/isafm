@@ -41,7 +41,7 @@ const columns = [
   {
     name: "vaccine",
     label: "Vaccine",
-    options: baseFilterOptions,
+    options: { ...baseFilterOptions, sort: true },
   },
   {
     name: "block",
