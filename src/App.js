@@ -25,6 +25,19 @@ const useStyles = makeStyles((theme) => ({
   selectEmpty: {
     marginTop: theme.spacing(2),
   },
+  footer: {
+    "@media (min-width:962px)": {
+      position: "fixed",
+    },
+    "@media (min-height:780px)": {
+      bottom: "15px",
+    },
+    left: "0px",
+    width: "100%",
+    fontSize: "1.2em",
+    color: "grey",
+    textAlign: "center",
+  },
   root: {
     flexGrow: 1,
     marginLeft: "1rem",
@@ -149,7 +162,7 @@ function App() {
           </Grid>
         </Grid>
       </div>
-      <Footer />
+      <Footer classes={classes.footer} />
     </>
   );
 }
